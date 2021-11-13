@@ -1,9 +1,12 @@
 <script>
     import { parse } from "svelte/compiler";
     import { onMount } from 'svelte';
+    import * as d3 from 'd3';
+import { children } from "svelte/internal";
 
     let svelteFiles = []
     let astArray = []
+    let data;
     
     onMount(async () => {
         await chrome.devtools.inspectedWindow.getResources(resources => {
@@ -59,7 +62,7 @@
                 }
             }
         })
-
+        data = children;
         const astData = {
                 children,
                 state,
@@ -70,7 +73,34 @@
 
         return astData
     }
+let el;
+    onMount(() => {
+		d3.select(el)
+			.select("div")
+			.data(data)
+			.enter()
+			.append("div")
+			.style("width", function(d) {
+				return d + "px";
+			})
+			.text(function(d) {
+				return d;
+			});
+	});
 </script>
+
+<style>
+	.chart :global(div) {
+		font: 10px sans-serif;
+		background-color: steelblue;
+		text-align: right;
+		padding: 3px;
+		margin: 1px;
+		color: white;
+	}
+</style>
+
+<div bind:this={el} class="chart"></div>
 
 <div>
     <ul>
@@ -88,7 +118,7 @@
             </ul>
             <ul>
                 {#if ast.astData.state.length}
-                <li>State Variables</li>
+                <li>State Variables 1</li>
                 <ul>
                     {#each ast.astData.state as element}
                         <li>{element}</li>
@@ -132,4 +162,5 @@
     
 
 </div>
+
 
