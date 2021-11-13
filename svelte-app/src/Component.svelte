@@ -6,7 +6,8 @@ import { children } from "svelte/internal";
 
     let svelteFiles = []
     let astArray = []
-    let data;
+    let data=[5,10,15];
+    let singleData;
     
     onMount(async () => {
         await chrome.devtools.inspectedWindow.getResources(resources => {
@@ -62,7 +63,8 @@ import { children } from "svelte/internal";
                 }
             }
         })
-        data = children;
+        data = [5,10,15];
+        singleData=children[0];
         const astData = {
                 children,
                 state,
@@ -73,37 +75,61 @@ import { children } from "svelte/internal";
 
         return astData
     }
-let el;
+ let el;
     onMount(() => {
 		d3.select(el)
-			.select("div")
+			.selectAll("div")
 			.data(data)
 			.enter()
 			.append("div")
-			.style("width", function(d) {
-				return d + "px";
+			.style("color", function(d) {
+				return 'red';
 			})
 			.text(function(d) {
 				return d;
 			});
 	});
+
+    let count = 1;
+	// the `$:` means 're-run whenever these values change'
+	$: doubled = count * 2;
+	$: quadrupled = doubled * 2;
+	function handleClick() {
+		count += 1;
+    }
+
+
+ 
 </script>
 
-<!-- <style>
+<style>
 	.chart{
-		font: 10px sans-serif;
-		background-color: steelblue;
+		font: 50px sans-serif;
+		background:'green';
 		text-align: right;
 		padding: 3px;
 		margin: 1px;
-		color: white;
+		color: rgb(211, 21, 100);
 	}
-</style> -->
+</style>
+    <div  bind:this={el} class="chart"></div> 
+    <!-- <div  bind:this={el} class="chart"></div> -->
+    <div>
+        <p>Here is testing children1 {data}</p>
+        <button>{singleData}</button>
+    </div>
 
-<!-- <div bind:this={el} class="chart"></div> -->
-<p>Here is testing children {data}</p>
+    <button on:click={handleClick}>
+        Count: {count}
+    </button>
+    <p>{count} * 2 = {doubled}</p>
+    <p>{doubled} * 2 = {quadrupled}</p>
+    <img alt='' src='./logo.png'>
 
-<div>
+
+
+
+<!-- <div>
     <ul>
         {#each astArray as ast}
             <li>{ast.name}</li>
@@ -119,7 +145,7 @@ let el;
             </ul>
             <ul>
                 {#if ast.astData.state.length}
-                <li>State Variables 2</li>
+                <li>State Variables 3</li>
                 <ul>
                     {#each ast.astData.state as element}
                         <li>{element}</li>
@@ -162,6 +188,6 @@ let el;
     </ul>
     
 
-</div>
+</div> -->
 
 
