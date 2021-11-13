@@ -89,7 +89,7 @@ let el;
 	});
 </script>
 
-<style>
+<!-- <style>
 	.chart{
 		font: 10px sans-serif;
 		background-color: steelblue;
@@ -98,10 +98,10 @@ let el;
 		margin: 1px;
 		color: white;
 	}
-</style>
+</style> -->
 
-<div bind:this={el} class="chart"></div>
-<p>Here is testing children{data}</p>
+<!-- <div bind:this={el} class="chart"></div> -->
+<p>Here is testing children {data}</p>
 
 <div>
     <ul>
