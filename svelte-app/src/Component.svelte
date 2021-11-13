@@ -73,23 +73,23 @@ import { children } from "svelte/internal";
 
         return astData
     }
-let el;
-    onMount(() => {
-		d3.select(el)
-			.select("div")
-			.data(data)
-			.enter()
-			.append("div")
-			.style("width", function(d) {
-				return d + "px";
-			})
-			.text(function(d) {
-				return d;
-			});
-	});
+// let el;
+//     onMount(() => {
+// 		d3.select(el)
+// 			.select("div")
+// 			.data(data)
+// 			.enter()
+// 			.append("div")
+// 			.style("width", function(d) {
+// 				return d + "px";
+// 			})
+// 			.text(function(d) {
+// 				return d;
+// 			});
+// 	});
 </script>
 
-<style>
+<!-- <style>
 	.chart :global(div) {
 		font: 10px sans-serif;
 		background-color: steelblue;
@@ -98,9 +98,10 @@ let el;
 		margin: 1px;
 		color: white;
 	}
-</style>
+</style> -->
 
-<div bind:this={el} class="chart"></div>
+<!-- <div bind:this={el} class="chart"></div> -->
+<p>{data}</p>
 
 <div>
     <ul>
