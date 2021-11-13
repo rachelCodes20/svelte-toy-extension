@@ -73,24 +73,24 @@ import { children } from "svelte/internal";
 
         return astData
     }
-// let el;
-//     onMount(() => {
-// 		d3.select(el)
-// 			.select("div")
-// 			.data(data)
-// 			.enter()
-// 			.append("div")
-// 			.style("width", function(d) {
-// 				return d + "px";
-// 			})
-// 			.text(function(d) {
-// 				return d;
-// 			});
-// 	});
+let el;
+    onMount(() => {
+		d3.select(el)
+			.select("div")
+			.data(data)
+			.enter()
+			.append("div")
+			.style("width", function(d) {
+				return d + "px";
+			})
+			.text(function(d) {
+				return d;
+			});
+	});
 </script>
 
-<!-- <style>
-	.chart :global(div) {
+<style>
+	.chart{
 		font: 10px sans-serif;
 		background-color: steelblue;
 		text-align: right;
@@ -98,10 +98,10 @@ import { children } from "svelte/internal";
 		margin: 1px;
 		color: white;
 	}
-</style> -->
+</style>
 
-<!-- <div bind:this={el} class="chart"></div> -->
-<p>{data}</p>
+<div bind:this={el} class="chart"></div>
+<p>Here is testing children{data}</p>
 
 <div>
     <ul>
@@ -119,7 +119,7 @@ import { children } from "svelte/internal";
             </ul>
             <ul>
                 {#if ast.astData.state.length}
-                <li>State Variables 1</li>
+                <li>State Variables 2</li>
                 <ul>
                     {#each ast.astData.state as element}
                         <li>{element}</li>
