@@ -8,23 +8,28 @@ import { children } from "svelte/internal";
     let astArray = []
     let data=[5,10,15];
     let singleData;
+    let  componentName;
+    
     
     onMount(async () => {
         await chrome.devtools.inspectedWindow.getResources(resources => {
             svelteFiles = resources.filter(resource => resource.url.includes('.svelte'))
-        
+            console.log('svelteFile is here line 16',svelteFiles);
             svelteFiles.forEach(file => {
                 file.getContent(source => {
                     const ast = parse(source)
-                    console.log(file.url)
-                    console.log(ast)
+                    console.log('file line 20',file)
+                    console.log("ast is here line 21",ast)
                     const parsedAST = parseAST(ast)
                     const astObj = {name: file.url, astData: parsedAST}
-                    astArray = [...astArray, astObj]      
+                    astArray = [...astArray, astObj] 
+                    
+                    
                 })
             })
         })
     })
+    
     
     function parseAST(ast) {
         let children = []
@@ -38,6 +43,9 @@ import { children } from "svelte/internal";
                 case "ImportDeclaration": {
                     if (declaration.source.value.includes('.svelte')) {
                         children = [...children, declaration.specifiers[0].local.name]
+                        componentName = `<${declaration.source.value.slice(2, declaration.source.value.length - 7)} />`;
+                        console.log('>>>',componentName)
+                        
                     } else if (declaration.source.value.includes('stores.js')) {
                         store = [...store, declaration.specifiers[0].local.name]
                     }
@@ -65,6 +73,7 @@ import { children } from "svelte/internal";
         })
         data = [5,10,15];
         singleData=children[0];
+
         const astData = {
                 children,
                 state,
@@ -124,15 +133,17 @@ import { children } from "svelte/internal";
     </button>
     <p>{count} * 2 = {doubled}</p>
     <p>{doubled} * 2 = {quadrupled}</p>
-    <img alt='' src='./logo.png'>
+    <img alt='' src='logo.png'>
+    <p>get file {componentName} </p>
+    
 
 
 
 
-<!-- <div>
+<div>
     <ul>
         {#each astArray as ast}
-            <li>{ast.name}</li>
+            <li>{ast.name} </li>
             <ul>
                 {#if ast.astData.children.length}
                 <li>Children</li>
@@ -188,6 +199,6 @@ import { children } from "svelte/internal";
     </ul>
     
 
-</div> -->
+</div>
 
 
