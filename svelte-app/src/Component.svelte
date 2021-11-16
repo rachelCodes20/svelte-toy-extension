@@ -9,19 +9,59 @@ import { children } from "svelte/internal";
     let data=[5,10,15];
     let singleData;
     let  componentName;
+    let urlName;
+    let tree = {};
     
     
     onMount(async () => {
         await chrome.devtools.inspectedWindow.getResources(resources => {
             svelteFiles = resources.filter(resource => resource.url.includes('.svelte'))
             console.log('svelteFile is here line 16',svelteFiles);
+            //get tree top
+            let fileName = svelteFiles[svelteFiles.length-1].url.slice(0,-7);
+            console.log('filename--- ',fileName)
+            let ans=[]
+
+           for(let i=fileName.length-1;i>=0;i--){
+
+  
+              if(fileName[i] !=='/'){
+              ans.push(fileName[i])
+               }else{
+                console.log('>>>>>',ans)
+                tree.top = ans.reverse().join('') ;
+                break
+               }
+
+            }
+           
             svelteFiles.forEach(file => {
+
+            let parent = file.url.slice(0,-7);
+            
+            let ans=[]
+            let parentName;
+
+           for(let i=parent.length-1;i>=0;i--){
+
+  
+              if(parent[i] !=='/'){
+              ans.push(parent[i])
+               }else{
+                console.log('>>>>>',ans)
+                parentName = ans.reverse().join('') ;
+                break
+               }
+
+            }
+
+
                 file.getContent(source => {
                     const ast = parse(source)
                     console.log('file line 20',file)
                     console.log("ast is here line 21",ast)
                     const parsedAST = parseAST(ast)
-                    const astObj = {name: file.url, astData: parsedAST}
+                    const astObj = {name: file.url, astData: parsedAST,parent:parentName}
                     astArray = [...astArray, astObj] 
                     
                     
@@ -37,14 +77,19 @@ import { children } from "svelte/internal";
         let store = []
         let props = []
         let reactives = []
-
+        if(ast.instance){
         ast.instance.content.body.forEach(declaration => {
             switch(declaration.type) {
                 case "ImportDeclaration": {
                     if (declaration.source.value.includes('.svelte')) {
+                        console.log('source value >> ',declaration.source.value)
                         children = [...children, declaration.specifiers[0].local.name]
+                        
                         componentName = `<${declaration.source.value.slice(2, declaration.source.value.length - 7)} />`;
                         console.log('>>>',componentName)
+                        
+
+                        
                         
                     } else if (declaration.source.value.includes('stores.js')) {
                         store = [...store, declaration.specifiers[0].local.name]
@@ -71,6 +116,7 @@ import { children } from "svelte/internal";
                 }
             }
         })
+    }
         data = [5,10,15];
         singleData=children[0];
 
@@ -128,6 +174,12 @@ import { children } from "svelte/internal";
         <button>{singleData}</button>
     </div>
 
+    <div>
+        <h2> Top: {tree.top}</h2>
+        
+        </div>
+        
+
     <button on:click={handleClick}>
         Count: {count}
     </button>
@@ -143,7 +195,7 @@ import { children } from "svelte/internal";
 <div>
     <ul>
         {#each astArray as ast}
-            <li>{ast.name} </li>
+            <li>{ast.name} && parent >> {ast.parent} </li>
             <ul>
                 {#if ast.astData.children.length}
                 <li>Children</li>
@@ -200,5 +252,6 @@ import { children } from "svelte/internal";
     
 
 </div>
+
 
 
