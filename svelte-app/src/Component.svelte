@@ -210,7 +210,17 @@ import { children } from "svelte/internal";
         childBtn=[...treeObjs[id]]
       }
       console.log("btn",childBtn)
-      return childBtn
+      
+      childBtn.forEach(item=>{
+          console.log('item on 215',item)
+        let newBtn = document.createElement('BUTTON');
+          let t = document.createTextNode(`${item}`);
+          newBtn.appendChild(t)
+          document.body.appendChild(newBtn)
+          
+      })
+      
+      
     }
     console.log('check btn',childBtn)
  
@@ -329,10 +339,11 @@ import { children } from "svelte/internal";
     <button id={tree.top} on:click={getChildren}>{tree.top}</button>
     
    <!-- <div>
-       {#each testBtn as child }
-        <button>{child}</button>
+       {#each childBtn as child }
+        <button>{@html {child}}</button>
     {/each}
     </div> -->
+   
 </div>
 
 
