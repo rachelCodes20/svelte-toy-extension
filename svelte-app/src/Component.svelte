@@ -2,6 +2,8 @@
     import { parse } from "svelte/compiler";
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
+    // import * as d3 from "https://cdn.skypack.dev/d3@7"; can't use internal module
+
 import { children } from "svelte/internal";
 
     let svelteFiles = []
@@ -9,8 +11,8 @@ import { children } from "svelte/internal";
     let data=[5,10,15];
     let singleData;
     let  componentName;
-    let urlName;
     let tree = {};
+    let treeObjs = {};
     
     
     onMount(async () => {
@@ -19,7 +21,7 @@ import { children } from "svelte/internal";
             console.log('svelteFile is here line 16',svelteFiles);
             //get tree top
             let fileName = svelteFiles[svelteFiles.length-1].url.slice(0,-7);
-            console.log('filename--- ',fileName)
+            console.log('filename--- ',fileName)//url
             let ans=[]
 
            for(let i=fileName.length-1;i>=0;i--){
@@ -50,11 +52,12 @@ import { children } from "svelte/internal";
                }else{
                 console.log('>>>>>',ans)
                 parentName = ans.reverse().join('') ;
+                treeObjs[parentName]=[];
                 break
                }
 
             }
-
+            console.log('treeObjs',treeObjs)
 
                 file.getContent(source => {
                     const ast = parse(source)
@@ -84,10 +87,12 @@ import { children } from "svelte/internal";
                     if (declaration.source.value.includes('.svelte')) {
                         console.log('source value >> ',declaration.source.value)
                         children = [...children, declaration.specifiers[0].local.name]
+                       
                         
-                        componentName = `<${declaration.source.value.slice(2, declaration.source.value.length - 7)} />`;
+                        componentName = `${declaration.source.value.slice(2, declaration.source.value.length - 7)}`;
                         console.log('>>>',componentName)
-                        
+
+                       
 
                         
                         
@@ -130,9 +135,28 @@ import { children } from "svelte/internal";
 
         return astData
     }
- let el;
+    
+    
+
+    function getTree(ast){
+
+        console.log('astArr',astArray)
+    console.log('astData',astArray.astData)
+    astArray.forEach(item=>{
+        console.log('name',item.name)
+
+        if(treeObjs[item.name]){
+                            treeObjs[item]=[...ast.astData.children]
+                        }
+                        
+    })
+    console.log('treeObjs',treeObjs)
+    return treeObjs
+    }
+
+ let el1;
     onMount(() => {
-		d3.select(el)
+		d3.select(el1)
 			.selectAll("div")
 			.data(data)
 			.enter()
@@ -145,36 +169,83 @@ import { children } from "svelte/internal";
 			});
 	});
 
+    let el2;
+	onMount(() => {
+		d3.select(el2)
+			.selectAll("div")
+			.data(data)
+			.enter()
+			.append("div")
+            .text(function(d) {
+				return d;
+			});
+	});
+
+// d3.select('div')
+// .data(data)
+// .enter()
+// .append('div')
+// .style('color',function(d){
+//     return 'green';
+// })
+// .text(function(d){
+//     return d;
+// })
+
     let count = 1;
 	// the `$:` means 're-run whenever these values change'
 	$: doubled = count * 2;
 	$: quadrupled = doubled * 2;
+
 	function handleClick() {
 		count += 1;
     }
-
-
+     
+    let childBtn;//got undefined 11/16 
+   
+    function getChildren(e){
+        console.log('e >>',e.target.id)
+        let id = e.target.id
+      if(treeObjs[id]){
+        childBtn=[...treeObjs[id]]
+      }
+      console.log("btn",childBtn)
+      return childBtn
+    }
+    console.log('check btn',childBtn)
  
 </script>
 
 <style>
-	.chart{
-		font: 50px sans-serif;
-		background:'green';
-		text-align: right;
-		padding: 3px;
-		margin: 1px;
-		color: rgb(211, 21, 100);
-	}
+	.chart div {
+    font: 10px;
+    background-color: steelblue;
+    text-align: right;
+    padding: 3px;
+    margin: 1px;
+    color:green;
+  }
 </style>
-    <div  bind:this={el} class="chart"></div> 
-    <!-- <div  bind:this={el} class="chart"></div> -->
+   
+   
+    
+    <p>see d3 effect next line</p>
+    <div class="chart">
+        {#each data as d}
+          <div style="width: {d}px">
+            {d}
+          </div>
+        {/each}
+    </div>
+    <div bind:this={el1} class="chart"></div>
+    <div bind:this={el2} class="chart"></div>
+    
     <div>
         <p>Here is testing children1 {data}</p>
         <button>{singleData}</button>
-    </div>
+    </div> 
 
-    <div>
+     <div>
         <h2> Top: {tree.top}</h2>
         
         </div>
@@ -198,7 +269,8 @@ import { children } from "svelte/internal";
             <li>{ast.name} && parent >> {ast.parent} </li>
             <ul>
                 {#if ast.astData.children.length}
-                <li>Children</li>
+                <!-- assign children to parent in treeObj -->
+                <li>Children test {treeObjs[ast.parent]=[...ast.astData.children]}</li>
                 <ul>
                     {#each ast.astData.children as child}
                         <li>{child}</li>
@@ -251,6 +323,16 @@ import { children } from "svelte/internal";
     </ul>
     
 
+</div>
+
+<div>
+    <button id={tree.top} on:click={getChildren}>{tree.top}</button>
+    
+   <!-- <div>
+       {#each testBtn as child }
+        <button>{child}</button>
+    {/each}
+    </div> -->
 </div>
 
 
