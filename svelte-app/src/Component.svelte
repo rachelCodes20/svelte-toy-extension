@@ -216,7 +216,9 @@ import { children } from "svelte/internal";
         let newBtn = document.createElement('BUTTON');
           let t = document.createTextNode(`${item}`);
           newBtn.appendChild(t)
-          document.body.appendChild(newBtn)
+        let renderBtn= document.body.appendChild(newBtn);
+        renderBtn.setAttribute('id',`${item}`)
+        renderBtn.setAttribute('onclick',`${this}`);
           
       })
       
