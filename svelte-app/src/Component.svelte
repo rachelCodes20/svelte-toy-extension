@@ -218,7 +218,10 @@ import { children } from "svelte/internal";
           newBtn.appendChild(t)
         let renderBtn= document.body.appendChild(newBtn);
         renderBtn.setAttribute('id',`${item}`)
-        renderBtn.setAttribute('onclick',`${this}`);
+        //renderBtn.setAttribute('onclick',`${getChildren}`);
+        //# forEach will block inline event handlers, need to use addEventListenr
+        renderBtn.addEventListener('click', getChildren);
+        
           
       })
       
