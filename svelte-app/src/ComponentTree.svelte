@@ -5,10 +5,11 @@
     // import * as d3 from "https://cdn.skypack.dev/d3@7"; can't use internal module
 
 
+
     let svelteFiles = []
     let astArray = []
-   //let data=[5,10,15];
-    let singleData;
+    // let data=[5,10,15];
+    // let singleData;
     let  componentName;
     let tree = {};
     let treeObjs = {};
@@ -19,22 +20,22 @@
             svelteFiles = resources.filter(resource => resource.url.includes('.svelte'))
             console.log('svelteFile is here line 16',svelteFiles);
             //get file url
-            let fileName = svelteFiles[svelteFiles.length-1].url.slice(0,-7);
-            console.log('filename--- ',fileName)//url
-            let ans=[]
+            // let fileName = svelteFiles[svelteFiles.length-1].url.slice(0,-7);
+            // console.log('filename--- ',fileName)//url
+        //     let ans1=[]
 
-           for(let i=fileName.length-1;i>=0;i--){
+        //    for(let i=fileName.length-1;i>=0;i--){
 
   
-              if(fileName[i] !=='/'){
-              ans.push(fileName[i])
-               }else{
-                console.log('>>>>> line 32',ans)
-                tree.top = ans.reverse().join('') ;
-                break
-               }
+        //       if(fileName[i] !=='/'){
+        //       ans1.push(fileName[i])
+        //        }else{
+        //         console.log('>>>>> line 33',ans1)
+        //         tree.top = ans1.reverse().join('') ;
+        //         break
+        //        }
 
-            }
+        //     }
            
             svelteFiles.forEach(file => {
 
@@ -122,7 +123,7 @@
         })
     }
         // data = [5,10,15];
-        //singleData=children[0];
+        // singleData=children[0];
 
         const astData = {
                 children,
@@ -139,7 +140,7 @@
 
     function getTree(ast){
 
-    console.log('astArr',astArray)
+        console.log('astArr',astArray)
     console.log('astData',astArray.astData)
     astArray.forEach(item=>{
         console.log('name',item.name)
@@ -153,44 +154,71 @@
     return treeObjs
     }
 
- let el1;
-    onMount(() => {
-		d3.select(el1)
-			.selectAll("div")
-			.data(data)
-			.enter()
-			.append("div")
-			.style("color", function(d) {
-				return 'red';
-			})
-			.text(function(d) {
-				return d;
-			});
-	});
+//  let el1;
+//     onMount(() => {
+// 		d3.select(el1)
+// 			.selectAll("div")
+// 			.data(data)
+// 			.enter()
+// 			.append("div")
+// 			.style("color", function(d) {
+// 				return 'red';
+// 			})
+// 			.text(function(d) {
+// 				return d;
+// 			});
+// 	});
 
-    let el2;
-	onMount(() => {
-		d3.select(el2)
-			.selectAll("div")
-			.data(data)
-			.enter()
-			.append("div")
-            .text(function(d) {
-				return d;
-			});
-	});
+    // let el2;
+	// onMount(() => {
+	// 	d3.select(el2)
+	// 		.selectAll("div")
+	// 		.data(data)
+	// 		.enter()
+	// 		.append("div")
+    //         .text(function(d) {
+	// 			return d;
+	// 		});
+	// });
 
+// d3.select('div')
+// .data(data)
+// .enter()
+// .append('div')
+// .style('color',function(d){
+//     return 'green';
+// })
+// .text(function(d){
+//     return d;
+// })
 
-    let count = 1;
-	// the `$:` means 're-run whenever these values change'
-	$: doubled = count * 2;
-	$: quadrupled = doubled * 2;
+    // let count = 1;
+	// // the `$:` means 're-run whenever these values change'
+	// $: doubled = count * 2;
+	// $: quadrupled = doubled * 2;
 
-	function handleClick() {
-		count += 1;
-    }
+	// function handleClick() {
+	// 	count += 1;
+    // }
      
     let childBtn;//got undefined 11/16 
+    // let color = ['green','red','yellow']
+
+    //  let el1;
+    // onMount(() => {
+	// 	d3.select(el1)
+	// 		.selectAll("button")
+	// 		.data(color)
+	// 		.enter()
+	// 		.append("div")
+	// 		.style("color", function(d) {
+	// 			return 'red';
+	// 		})
+	// 		.text(function(d) {
+	// 			return d;
+	// 		});
+	// });
+
    
     function getChildren(e){
         console.log('e >>',e.target.id)
@@ -199,21 +227,28 @@
         childBtn=[...treeObjs[id]]
       }
       console.log("btn",childBtn)
-      
+      let c=document.getElementById('treeBtns')
       childBtn.forEach(item=>{
           console.log('item on 215',item)
         let newBtn = document.createElement('BUTTON');
           let t = document.createTextNode(`${item}`);
-          newBtn.appendChild(t)
-        let renderBtn= document.body.appendChild(newBtn);
+          newBtn.appendChild(t);
+          
+        let renderBtn= c.appendChild(newBtn);
         renderBtn.setAttribute('id',`${item}`)
+
         //renderBtn.setAttribute('onclick',`${getChildren}`);
         //# forEach will block inline event handlers, need to use addEventListenr
         renderBtn.addEventListener('click', getChildren);
         
+        
           
       })
-      
+      //insert <br/> after children rendered
+    let brLine = document.createElement('BR');
+        c.appendChild(brLine)
+    
+       
       
     }
     console.log('check btn',childBtn)
@@ -230,7 +265,7 @@
     color:green;
   }
 </style> -->
-   
+   <h1>In ComponentTree</h1>
    
     
     <!-- <p>see d3 effect next line</p>
@@ -243,8 +278,8 @@
     </div>
     <div bind:this={el1} class="chart"></div>
     <div bind:this={el2} class="chart"></div>
-     -->
-    <!-- <div>
+    
+    <div>
         <p>Here is testing children1 {data}</p>
         <button>{singleData}</button>
     </div> 
@@ -255,13 +290,13 @@
         </div> -->
         
 
-    <button on:click={handleClick}>
+    <!-- <button on:click={handleClick}>
         Count: {count}
     </button>
     <p>{count} * 2 = {doubled}</p>
     <p>{doubled} * 2 = {quadrupled}</p>
-    <img alt='' src='logo.png'>
-    <p>get file {componentName} </p>
+    <img alt='' src='logo.png'> -->
+    <!-- <p>get file {componentName} </p> -->
     
 
 
@@ -329,16 +364,16 @@
 
 </div>
 
-<div>
-    
-    <button id={tree.top} on:click={getChildren}>{tree.top}</button>
+<div id='treeBtns'>
+    <!-- -->
+    <!-- <button id={tree.top} on:click={getChildren}>{tree.top}</button> -->
     <p>using point to App directly</p>
     <button id='App' on:click={getChildren}>App</button>
+    <br/>
    
     
     
   
-   
 </div>
 
 
