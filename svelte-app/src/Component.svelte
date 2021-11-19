@@ -1,15 +1,18 @@
 <script>
+    
     import { parse } from "svelte/compiler";
     import { onMount } from 'svelte';
 
     let svelteFiles = []
     let astArray = []
-    
+    //dev tool talking to browser here
     onMount(async () => {
+        //get resouces getting all the static files
         await chrome.devtools.inspectedWindow.getResources(resources => {
             svelteFiles = resources.filter(resource => resource.url.includes('.svelte'))
         
             svelteFiles.forEach(file => {
+                //iterating thr each components (arr or obj)
                 file.getContent(source => {
                     const ast = parse(source)
                     console.log(file.url)
@@ -21,7 +24,6 @@
             })
         })
     })
-    
     function parseAST(ast) {
         let children = []
         let state = []
