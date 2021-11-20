@@ -41,7 +41,7 @@
             svelteFiles.forEach(file => {
 
             let parent = file.url.slice(0,-7);
-            
+            // document.classList.add()
             let ans=[]
             let parentName;
 
@@ -209,6 +209,7 @@
           newBtn.appendChild(t)
         let renderBtn= document.body.appendChild(newBtn);
         renderBtn.setAttribute('id',`${item}`)
+        renderBtn.setAttribute('class',`content`)
         //renderBtn.setAttribute('onclick',`${getChildren}`);
         //# forEach will block inline event handlers, need to use addEventListenr
         renderBtn.addEventListener('click', getChildren);
@@ -272,7 +273,7 @@
 <div>
     <ul>
         {#each astArray as ast}
-            <li>{ast.name} && parent >> {ast.parent} </li>
+            <li>{ast.name} && {ast.parent} </li>
             <ul>
                 {#if ast.astData.children.length}
                 <!-- assign children to parent in treeObj -->
@@ -335,7 +336,7 @@
     
     <button id={tree.top} on:click={getChildren}>{tree.top}</button>
     <p>using point to App directly</p>
-    <button id='App' on:click={getChildren}>App</button>
+    <button id='App' class="collapsible" on:click={getChildren}>App</button>
    
     
     

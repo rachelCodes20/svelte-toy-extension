@@ -254,31 +254,26 @@
     console.log('check btn',childBtn)
 
     let collapseComponents = document.getElementsByClassName("collapsible");
-
-    for (let i = 0; i < collapseComponents.length; i++) {
-        
-        collapseComponents[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        var content = this.nextElementSibling;
-        if (content.style.display === "block") {
-        content.style.display = "none";
-        } else {
+    console.log('collapse comps ', collapseComponents);
+    
+    //give each component class of collapsible and impl open func
+    const open = () => {  
+        for (let i = 0; i < collapseComponents.length; i++) { 
+        let currBtn = collapseComponents[i]
+        currBtn.addEventListener("click", function() {
+        var content = currBtn.nextElementSibling;
+        if (content.style.display === "none") {
         content.style.display = "block";
+        } else {
+        content.style.display = "none";
         }
     });
-}
+    }
+  }
+  document.addEventListener('click', () => open());
+
 </script>
 
-<!-- <style>
-	.chart div {
-    font: 10px;
-    background-color: steelblue;
-    text-align: right;
-    padding: 3px;
-    margin: 1px;
-    color:green;
-  }
-</style> -->
    <h1>In ComponentTree</h1>
    
     
@@ -382,11 +377,9 @@
     <!-- -->
     <!-- <button id={tree.top} on:click={getChildren}>{tree.top}</button> -->
     <p>pointing to app</p>
-    <button id='App' class="collapsible" on:click={getChildren}>App</button>
+    <button id='AppButton' class="collapsible" on:click={getChildren}>App</button>
     <br/>
    
-    
-    
   
 <!-- </div> -->
 
