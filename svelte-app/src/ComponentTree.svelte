@@ -231,28 +231,42 @@
       childBtn.forEach(item=>{
           console.log('item on 215',item)
         let newBtn = document.createElement('BUTTON');
+        let newBtnDiv = document.createElement('div');
+        newBtnDiv.classList.add('content');
+        newBtnDiv.append(newBtn)
           let t = document.createTextNode(`${item}`);
           newBtn.appendChild(t);
           
         let renderBtn= c.appendChild(newBtn);
-        renderBtn.setAttribute('id',`${item}`)
+        // renderBtn.setAttribute('id',`${item}`)
+        
 
         //renderBtn.setAttribute('onclick',`${getChildren}`);
         //# forEach will block inline event handlers, need to use addEventListenr
         renderBtn.addEventListener('click', getChildren);
-        
-        
           
       })
       //insert <br/> after children rendered
     let brLine = document.createElement('BR');
         c.appendChild(brLine)
-    
-       
       
     }
     console.log('check btn',childBtn)
- 
+
+    let collapseComponents = document.getElementsByClassName("collapsible");
+
+    for (let i = 0; i < collapseComponents.length; i++) {
+        
+        collapseComponents[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+        content.style.display = "none";
+        } else {
+        content.style.display = "block";
+        }
+    });
+}
 </script>
 
 <!-- <style>
@@ -368,7 +382,7 @@
     <!-- -->
     <!-- <button id={tree.top} on:click={getChildren}>{tree.top}</button> -->
     <p>using point to App directly</p>
-    <button id='App' on:click={getChildren}>App</button>
+    <button id='App' class="collapsible" on:click={getChildren}>App</button>
     <br/>
    
     
