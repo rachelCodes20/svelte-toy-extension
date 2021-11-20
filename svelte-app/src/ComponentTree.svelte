@@ -378,17 +378,17 @@
 
 </div>
 
-<div id='treeBtns'>
+<!-- <div id='treeBtns'> -->
     <!-- -->
     <!-- <button id={tree.top} on:click={getChildren}>{tree.top}</button> -->
-    <p>using point to App directly</p>
+    <p>pointing to app</p>
     <button id='App' class="collapsible" on:click={getChildren}>App</button>
     <br/>
    
     
     
   
-</div>
+<!-- </div> -->
 
 
 
